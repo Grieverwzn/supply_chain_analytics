@@ -1,0 +1,2 @@
+train_id,stop_id,fixed_cost,variable_cost,loading_time,decay_rate,arrival_time at stations,arrival_time_at terminal
+1,1,10,0.001,15,1,670,870

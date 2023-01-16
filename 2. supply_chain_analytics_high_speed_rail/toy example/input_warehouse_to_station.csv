@@ -1,0 +1,2 @@
+warehouse_id,station_id,fixed_cost,variable_cost,transportation_time,decay_rate
+1,1,50,0.001,200,1

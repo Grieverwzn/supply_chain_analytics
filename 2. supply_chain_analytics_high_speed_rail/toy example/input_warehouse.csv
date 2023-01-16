@@ -1,0 +1,2 @@
+warehouse_id,fix_cost,variable_cost,decay_rate,average_storage_time
+1,50,0.001,0.9,30
