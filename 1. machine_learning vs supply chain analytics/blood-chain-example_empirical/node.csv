@@ -1,0 +1,15 @@
+node_name,node_id,node_type,ub_demand,lb_demand,penalty_surplus,penalty_shortage
+Reginal Organization,1,supply,,,,
+CS1,2,,,,,
+CS2,3,,,,,
+BC1,4,,,,,
+BC2,5,,,,,
+CL1,6,,,,,
+CL2,7,,,,,
+SF1,8,,,,,
+SF2,9,,,,,
+DC1,10,,,,,
+DC2,11,,,,,
+R1,12,demand,10,5,50,2200
+R2,13,demand,50,40,60,3000
+R3,14,demand,40,25,50,3000

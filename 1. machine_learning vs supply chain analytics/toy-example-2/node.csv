@@ -1,0 +1,8 @@
+node_name,node_id,node_type,ub_demand,lb_demand,penalty_surplus,penalty_shortage
+Organization,1,supply,,,,
+CS1,2,,,,,
+BC1,3,,,,,
+CL1,4,,,,,
+SF1,5,,,,,
+DC1,6,,,,,
+DP1,7,demand,5,0,0,100

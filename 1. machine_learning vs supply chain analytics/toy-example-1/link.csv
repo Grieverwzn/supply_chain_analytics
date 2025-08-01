@@ -1,0 +1,7 @@
+link_name,link_id,from_node_id,to_node_id,cost_coeff2,cost_coeff1,risk_coeff2,discard_coeff2,decay_rate
+a,1,1,2,1,6,2,0,1
+b,2,2,3,2,7,0,0,1
+c,3,3,4,1,11,0,0,1
+d,4,4,5,3,11,0,0,1
+e,5,5,6,1,2,0,0,1
+f,6,6,7,1,1,0,0,1
