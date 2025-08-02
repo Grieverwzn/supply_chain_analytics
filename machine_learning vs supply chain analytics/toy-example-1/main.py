@@ -7,11 +7,14 @@ import datetime
 import csv
 
 import matplotlib
+# fix random seed for reproducibility
+np.random.seed(42)
 
 matplotlib.use('TkAgg')
 num_epochs = 1000
-nb_samples = 100000
-batch_size = int(nb_samples * 0.3)
+nb_samples = 800
+learning_rate = 0.01  # learning rate for the optimizer
+batch_size = int(nb_samples * 0.5)
 risk_aversion = 1.0  # risk aversion coefficient, used to balance the risk and cost in the objective function
 # ==============Global Variables================
 g_node_list = []
@@ -135,7 +138,7 @@ class Network:
                     path = Path(path_seq, path_node_seq)
                     g_path_list.append(path)
                     path_var = tf.Variable(
-                        initial_value=tf.random.uniform([1], minval=0.0, maxval=1.0, dtype=tf.float64),
+                        initial_value=tf.random.uniform([1], minval=0.0, maxval=0.0, dtype=tf.float64),
                         trainable=True,
                         name=f"path_flow_{path_seq}")
                     g_path_variable_list.append(path_var)
@@ -265,7 +268,6 @@ def demand_reading(time_index=0):
 
 def generate_random_empirical_demand():
     # set random seed for reproducibility
-    nb_samples = 800
     nb_time_steps = 7
     # generate random demand for each demand node using uniform distribution bounded by ub_demand and lb_demand
     total_demand_list = []
@@ -360,7 +362,7 @@ def create_path_demand_point_incidence_matrices():
 
 
 # =================Model Training================
-
+@tf.function
 def train_step(path_link_decay_mat, path_demand_decay_mat,
                path_link_inc_mat, path_demand_inc_mat):
     with tf.GradientTape() as tape:
@@ -425,13 +427,13 @@ def train_step(path_link_decay_mat, path_demand_decay_mat,
         total_loss_value = loss_value_cost + risk_aversion * loss_value_risk + \
                            loss_value_discard + loss_value_surplus + loss_value_shortage
 
-        print((f"Loss Cost: {loss_value_cost.numpy()[0]}, "
-               f"Loss Risk: {loss_value_risk.numpy()[0]}, "
-               f"Loss Discard: {loss_value_discard.numpy()[0]},"
-               f"Loss Surplus: {loss_value_surplus.numpy()[0]}, "
-               f"Loss Shortage: {loss_value_shortage.numpy()[0]}"))
-        print(f"Total Loss: {total_loss_value.numpy()[0]}")
-        print(f"path_flow_variable_list: {[var.numpy()[0].item() for var in g_path_variable_list]}")
+        # print((f"Loss Cost: {loss_value_cost.numpy()[0]}, "
+        #        f"Loss Risk: {loss_value_risk.numpy()[0]}, "
+        #        f"Loss Discard: {loss_value_discard.numpy()[0]},"
+        #        f"Loss Surplus: {loss_value_surplus.numpy()[0]}, "
+        #        f"Loss Shortage: {loss_value_shortage.numpy()[0]}"))
+        # print(f"Total Loss: {total_loss_value.numpy()[0]}")
+        # print(f"path_flow_variable_list: {[var.numpy()[0].item() for var in g_path_variable_list]}")
 
 
     # Compute gradients and apply the optimizer
@@ -471,16 +473,16 @@ if __name__ == '__main__':
     # Step 7: Training
     print('-------- Step 6: Training --------', '\n')
 
-    learning_rate = 0.01
-    decay_steps = 100
-    decay_rate = 0.96
+    # learning_rate = 0.001
+    # decay_steps = 100
+    # decay_rate = 1.0
+    #
+    # lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+    #     initial_learning_rate=learning_rate,
+    #     decay_steps=decay_steps,
+    #     decay_rate=decay_rate, )
 
-    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
-        initial_learning_rate=learning_rate,
-        decay_steps=decay_steps,
-        decay_rate=decay_rate, )
-
-    optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
     for epoch in range(num_epochs):
         print(f"Epoch {epoch + 1}/{num_epochs}")
         (total_loss, loss_cost, loss_risk, loss_discard, loss_surplus,
@@ -535,3 +537,5 @@ if __name__ == '__main__':
                 writer.writerow(['epoch', 'link_id', 'link_flow'])
             for link_index, link in enumerate(g_link_list):
                 writer.writerow([epoch + 1, link.link_id, est_link_flow_tensor.numpy()[0][link_index]])
+
+    print(f"Path_flow_variable_list: {[var.numpy()[0].item() for var in g_path_variable_list]}")

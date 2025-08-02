@@ -10,7 +10,7 @@ import matplotlib
 
 matplotlib.use('TkAgg')
 num_epochs = 5000
-nb_samples = 100000
+nb_samples = 1200
 batch_size = int(nb_samples * 0.5)
 risk_aversion = 0.7  # risk aversion coefficient, used to balance the risk and cost in the objective function
 # ==============Global Variables================
@@ -473,7 +473,7 @@ if __name__ == '__main__':
 
     learning_rate = 0.01
     decay_steps = 100
-    decay_rate = 0.96
+    decay_rate = 1.0
 
     lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
         initial_learning_rate=learning_rate,
